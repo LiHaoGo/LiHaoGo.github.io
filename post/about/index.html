@@ -1,13 +1,20 @@
+<!DOCTYPE html>
 <html>
   <head>
-    <meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta charset="utf-8" >
+
 <title>Cookie | Gridea</title>
-<link rel="shortcut icon" href="https://LiHaoGo.github.io/favicon.ico?v=1628651906922">
-<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
-<link rel="stylesheet" href="https://LiHaoGo.github.io/styles/main.css">
-<link rel="alternate" type="application/atom+xml" title="Cookie | Gridea - Atom Feed" href="https://LiHaoGo.github.io/atom.xml">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://LiHaoGo.github./favicon.ico?v=1628657090168">
+<link rel="stylesheet" href="https://LiHaoGo.github./styles/main.css">
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 
 
 
@@ -16,82 +23,81 @@
 Cookie 是服务器保存在浏览器的一小段文本信息，每个 Cookie 的大小一般不能超过4KB。浏览器每次向服务器发出请求，就会自动附上这段信息。
 Cookie 主要用来分辨两个请求是否来自同一个浏览器，以及用来..." />
     <meta name="keywords" content="" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
-    <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
   </head>
   <body>
-    <div class="main">
-      <div class="main-content">
-        <div class="site-header">
-  <a href="https://LiHaoGo.github.io">
-  <img class="avatar" src="https://LiHaoGo.github.io/images/avatar.png?v=1628651906922" alt="">
-  </a>
-  <h1 class="site-title">
-    Gridea
-  </h1>
-  <p class="site-description">
-    温故而知新
-  </p>
-  <div class="menu-container">
-    
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://LiHaoGo.github.">
+        <img src="https://LiHaoGo.github./images/avatar.png?v=1628657090168" class="site-logo">
+        <h1 class="site-title">Gridea</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
       
-        <a href="/" class="menu">
-          首页
-        </a>
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
       
-    
+        
+          <a href="/archives" class="site-nav">
+            归档
+          </a>
+        
       
-        <a href="/archives" class="menu">
-          归档
-        </a>
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
       
-    
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
       
-        <a href="/tags" class="menu">
-          标签
-        </a>
-      
-    
-      
-        <a href="/post/about" class="menu">
-          关于
-        </a>
-      
-    
+    </div>
   </div>
-  <div class="social-container">
-    
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
       
-    
+        
       
-    
+        
       
-    
+        
       
-    
+        
       
-    
+        
+      
+    </div>
+    <div class="site-description">
+      温故而知新
+    </div>
+    <div class="site-footer">
+      Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | <a class="rss" href="https://LiHaoGo.github./atom.xml" target="_blank">RSS</a>
+    </div>
   </div>
 </div>
 
-        <div class="post-detail">
-          <article class="post">
-            <h2 class="post-title">
-              Cookie
-            </h2>
-            <div class="post-info">
-              <span>
-                2019-01-25
-              </span>
-              <span>
-                11 min read
-              </span>
-              
-            </div>
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">Cookie</h2>
+            <div class="post-date">2019-01-25</div>
             
-            <div class="post-content-wrapper">
-              <div class="post-content">
-                <h1 id="cookie"><strong>Cookie</strong></h1>
+            <div class="post-content" v-pre>
+              <h1 id="cookie"><strong>Cookie</strong></h1>
 <h2 id="1-概述">1. 概述</h2>
 <p>Cookie 是服务器保存在浏览器的一小段文本信息，每个 Cookie 的大小一般不能超过4KB。浏览器每次向服务器发出请求，就会自动附上这段信息。</p>
 <p>Cookie 主要用来分辨两个请求是否来自同一个浏览器，以及用来保存一些状态信息。它的常用场合有以下一些。</p>
@@ -234,88 +240,36 @@ Set-Cookie: &lt;cookie-name&gt;=&lt;cookie-value&gt;; HttpOnly
 <p>上面代码中，名为<code>fontSize</code>的 Cookie 的值为空，过期时间设为1970年1月1月零点，就等同于删除了这个 Cookie。</p>
 <p>注: 本文来源 http://javascript.ruanyifeng.com/bom/cookie.html</p>
 
-              </div>
-              <div class="toc-container">
-                <ul class="markdownIt-TOC">
-<li><a href="#cookie"><strong>Cookie</strong></a>
-<ul>
-<li><a href="#1-%E6%A6%82%E8%BF%B0">1. 概述</a></li>
-<li><a href="#2-cookie-%E4%B8%8E-http-%E5%8D%8F%E8%AE%AE">2. Cookie 与 HTTP 协议</a>
-<ul>
-<li><a href="#21-http-%E5%9B%9E%E5%BA%94cookie-%E7%9A%84%E7%94%9F%E6%88%90">2.1 .HTTP 回应：Cookie 的生成</a></li>
-<li><a href="#22-http-%E8%AF%B7%E6%B1%82cookie-%E7%9A%84%E5%8F%91%E9%80%81">2.2 HTTP 请求：Cookie 的发送</a></li>
-</ul>
-</li>
-<li><a href="#3-cookie-%E7%9A%84%E5%B1%9E%E6%80%A7">3. Cookie 的属性</a>
-<ul>
-<li><a href="#31-expiresmax-age">3.1 Expires，Max-Age</a></li>
-<li><a href="#32-domainpath">3.2 Domain，Path</a></li>
-<li><a href="#33-securehttponly">3.3 Secure，HttpOnly</a></li>
-</ul>
-</li>
-<li><a href="#4-documentcookie">4. document.cookie</a></li>
-</ul>
-</li>
-</ul>
-
-              </div>
             </div>
-          </article>
+            
+            
+
+            
+
+          </div>
+
         </div>
-
-        
-
-        
-
-        <div class="site-footer">
-  Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a>
-  <a class="rss" href="https://LiHaoGo.github.io/atom.xml" target="_blank">
-    <i class="ri-rss-line"></i> RSS
-  </a>
-</div>
-
       </div>
     </div>
 
-    <script>
-      hljs.initHighlightingOnLoad()
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<script type="application/javascript">
 
-      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+AOS.init();
 
-      // This should probably be throttled.
-      // Especially because it triggers during smooth scrolling.
-      // https://lodash.com/docs/4.17.10#throttle
-      // You could do like...
-      // window.addEventListener("scroll", () => {
-      //    _.throttle(doThatStuff, 100);
-      // });
-      // Only not doing it here to keep this Pen dependency-free.
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
 
-      window.addEventListener("scroll", event => {
-        let fromTop = window.scrollY;
+</script>
 
-        mainNavLinks.forEach((link, index) => {
-          let section = document.getElementById(decodeURI(link.hash).substring(1));
-          let nextSection = null
-          if (mainNavLinks[index + 1]) {
-            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
-          }
-          if (section.offsetTop <= fromTop) {
-            if (nextSection) {
-              if (nextSection.offsetTop > fromTop) {
-                link.classList.add("current");
-              } else {
-                link.classList.remove("current");    
-              }
-            } else {
-              link.classList.add("current");
-            }
-          } else {
-            link.classList.remove("current");
-          }
-        });
-      });
 
-    </script>
+
+
+
+
   </body>
 </html>
