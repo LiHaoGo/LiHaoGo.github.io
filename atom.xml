@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://LiHaoGo.github.io</id>
     <title>LeYi</title>
-    <updated>2021-08-20T02:28:22.641Z</updated>
+    <updated>2021-08-20T08:55:46.167Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://LiHaoGo.github.io"/>
     <link rel="self" href="https://LiHaoGo.github.io/atom.xml"/>
@@ -10,6 +10,193 @@
     <logo>https://LiHaoGo.github.io/images/avatar.png</logo>
     <icon>https://LiHaoGo.github.io/favicon.ico</icon>
     <rights>All rights reserved 2021, LeYi</rights>
+    <entry>
+        <title type="html"><![CDATA[ 如何利用CSS画一个大风车]]></title>
+        <id>https://LiHaoGo.github.io/post/ru-he-li-yong-css-hua-yi-ge-da-feng-che/</id>
+        <link href="https://LiHaoGo.github.io/post/ru-he-li-yong-css-hua-yi-ge-da-feng-che/">
+        </link>
+        <updated>2021-08-20T08:49:07.000Z</updated>
+        <content type="html"><![CDATA[<h3 id="废话少说直接上效果图">废话少说直接上效果图：</h3>
+<figure data-type="image" tabindex="1"><img src="https://LiHaoGo.github.io/post-images/1629449510049.png" alt="" loading="lazy"></figure>
+<h3 id="主要是通过设置边框的样式去画的">主要是通过设置边框的样式去画的</h3>
+<h2 id="1第一步">1.第一步</h2>
+<h3 id="建一个容器便于每个风叶定位">建一个容器便于每个风叶定位</h3>
+<pre><code class="language-html"> &lt;!-- 容器 方便定位每一个风叶 --&gt;
+    &lt;div class=&quot;box&quot;&gt;
+        &lt;div class=&quot;red&quot;&gt;&lt;/div&gt;
+    &lt;/div&gt;
+</code></pre>
+<h4 id="然后就是对应的css代码">然后就是对应的CSS代码</h4>
+<pre><code class="language-css"> .box{
+          width: 400px;
+            height: 200px;
+            margin: 200px auto;
+            position: relative;
+            border: 1px solid #ddd;
+        }
+        .red {
+            width: 0;
+            height: 0;
+            border: 100px solid red;       
+        }
+</code></pre>
+<h3 id="然后你会得到一个这样的效果图">然后你会得到一个这样的效果图</h3>
+<figure data-type="image" tabindex="2"><img src="https://LiHaoGo.github.io/post-images/1629449547986.png" alt="" loading="lazy"></figure>
+<h4 id="这样看也能看不出什么效果-我们对代码进行一点小小的改动">这样看也能看不出什么效果 ，我们对代码进行一点小小的改动</h4>
+<pre><code class="language-css">  .red {
+            width: 0;
+            height: 0;
+            border: 100px solid red;
+            //对每个边框的颜色进行独立的设置
+            border-left-color: green;
+            border-top-color: pink;
+            border-right-color:black ;
+        }
+</code></pre>
+<figure data-type="image" tabindex="3"><img src="https://LiHaoGo.github.io/post-images/1629449573735.png" alt="" loading="lazy"></figure>
+<h3 id="然后继续写css代码">然后继续写CSS代码</h3>
+<pre><code class="language-css">  .red {
+            width: 0;
+            height: 0;
+            border: 100px solid red;
+            border-top: 0;
+            border-left-color: transparent;
+            position: absolute;
+        }
+</code></pre>
+<h3 id="这个时候你就会发现由原来的正方形变成这个样子了这样大风车的一个风叶就画好了同理画出下面四个">这个时候你就会发现由原来的正方形变成这个样子了（这样大风车的一个风叶就画好了，同理画出下面四个）</h3>
+<figure data-type="image" tabindex="4"><img src="https://LiHaoGo.github.io/post-images/1629449580060.png" alt="" loading="lazy"></figure>
+<h3 id="继续添加剩下三个div">继续添加剩下三个div</h3>
+<pre><code class="language-html"> &lt;!-- 容器 方便定位每一个风叶 --&gt;
+    &lt;div class=&quot;box&quot;&gt;
+        &lt;div class=&quot;red&quot;&gt;&lt;/div&gt;
+        &lt;div class=&quot;green&quot;&gt;&lt;/div&gt;
+        &lt;div class=&quot;blue&quot;&gt;&lt;/div&gt;
+        &lt;div class=&quot;pink&quot;&gt;&lt;/div&gt;
+    &lt;/div&gt;
+</code></pre>
+<figure data-type="image" tabindex="5"><img src="https://LiHaoGo.github.io/post-images/1629449597194.png" alt="" loading="lazy"></figure>
+<h3 id="css代码">CSS代码</h3>
+<pre><code class="language-css"> .box {
+            width: 400px;
+            height: 200px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border: 1px solid #ddd;
+        }
+
+        .red {
+            width: 0;
+            height: 0;
+            border: 100px solid red;
+            border-top: 0;
+            border-left-color: transparent;
+        }
+
+        .green {
+            width: 0;
+            height: 0;
+            border: 100px solid green;
+            border-right: 0;
+            border-top-color: transparent;
+        }
+
+        .blue {
+            width: 0;
+            height: 0;
+            border: 100px solid blue;
+            border-left: 0;
+            border-bottom-color: transparent;
+        }
+
+        .pink {
+            width: 0;
+            height: 0;
+            border: 100px solid pink;
+            border-bottom: 0;
+            border-right-color: transparent;
+        }
+</code></pre>
+<h3 id="就差最后一步了把每个风叶定位到合适的位置通过绝对定位-position-absolute">就差最后一步了，把每个风叶定位到合适的位置(通过绝对定位 position : absolute)</h3>
+<h3 id="完整代码">完整代码</h3>
+<pre><code class="language-css"> .box {
+            width: 400px;
+            height: 200px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border: 1px solid #ddd;
+        }
+
+        .red {
+            width: 0;
+            height: 0;
+            border: 100px solid red;
+            border-top: 0;
+            border-left-color: transparent;
+        }
+
+        .green {
+            width: 0;
+            height: 0;
+            border: 100px solid green;
+            border-right: 0;
+            border-top-color: transparent;
+            position: absolute;
+            left: 200px;
+            top: -100px;
+        }
+
+        .blue {
+            width: 0;
+            height: 0;
+            border: 100px solid blue;
+            border-left: 0;
+            border-bottom-color: transparent;
+            position: absolute;
+            left: 100px;
+            top: 100px;
+        }
+
+        .pink {
+            width: 0;
+            height: 0;
+            border: 100px solid pink;
+            border-bottom: 0;
+            border-right-color: transparent;
+            position: absolute;
+            left: 200px;
+            top: 100px;
+        }
+</code></pre>
+<h2 id="最后风车就画好了">最后风车就画好了</h2>
+<h2 id="既然是风车怎么能不会旋转呢可以添加动画来设置旋转">既然是风车怎么能不会旋转呢，可以添加动画来设置旋转</h2>
+<h4 id="定义一个旋转动画">定义一个旋转动画</h4>
+<pre><code class="language-css">@keyframes rotateBox {
+            form{
+                transform: rotate(0);
+            }
+            to{
+                transform: rotate(360deg);
+            }
+        }
+</code></pre>
+<h3 id="在类名为box的div上引用">在类名为box的div上引用</h3>
+<pre><code class="language-css"> .box {            
+         width: 400px;        
+          height: 200px;        
+          margin: 200px auto;    
+          position: relative;        
+          border: 1px solid #ddd;         
+         animation: rotateBox 1s infinite  linear; // 动画名  执行一次需要的时间   一直执行  规定动画的速度曲线        }
+</code></pre>
+<h2 id="最后效果图">最后效果图：</h2>
+<figure data-type="image" tabindex="6"><img src="https://LiHaoGo.github.io/post-images/1629449634716.gif" alt="" loading="lazy"></figure>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[# js判断数据类型的四种方法]]></title>
         <id>https://LiHaoGo.github.io/post/js-pan-duan-shu-ju-lei-xing-de-si-chong-fang-fa/</id>
