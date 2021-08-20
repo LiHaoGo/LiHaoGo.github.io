@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://LiHaoGo.github.io</id>
     <title>LeYi</title>
-    <updated>2021-08-11T06:18:01.223Z</updated>
+    <updated>2021-08-20T02:19:22.868Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://LiHaoGo.github.io"/>
     <link rel="self" href="https://LiHaoGo.github.io/atom.xml"/>
@@ -10,6 +10,91 @@
     <logo>https://LiHaoGo.github.io/images/avatar.png</logo>
     <icon>https://LiHaoGo.github.io/favicon.ico</icon>
     <rights>All rights reserved 2021, LeYi</rights>
+    <entry>
+        <title type="html"><![CDATA[# js判断数据类型的四种方法]]></title>
+        <id>https://LiHaoGo.github.io/post/js-pan-duan-shu-ju-lei-xing-de-si-chong-fang-fa/</id>
+        <link href="https://LiHaoGo.github.io/post/js-pan-duan-shu-ju-lei-xing-de-si-chong-fang-fa/">
+        </link>
+        <updated>2021-08-20T02:18:33.000Z</updated>
+        <content type="html"><![CDATA[<h1 id="js判断数据类型的四种方法">js判断数据类型的四种方法</h1>
+<h2 id="1-typeof">1. typeof</h2>
+<h4 id="typeof是一个操作符其右侧跟一个表达式并且返回这个表达式的数据类型返回类型为numberstringbooleanundefinedfunctionobjectsymbol">typeof是一个操作符，其右侧跟一个表达式，并且返回这个表达式的数据类型，返回类型为：number,string,boolean,undefined,function,object,symbol</h4>
+<pre><code class="language-js">typeof &quot;123&quot;;  //string
+typeof 0;   //number
+typeof true; //boolean
+typeof undefined; //undefined
+typeof function(){}; //function
+typeof {}; //object
+typeof Symbol(); //symbol
+typeof null; //object
+typeof []; //object
+typeof new Date(); //object
+</code></pre>
+<h2 id="2-instanceof">2. instanceof</h2>
+<h4 id="instanceof用来判断a是否为b的实例-表达式为表达式为a-instanceof-b如果a是b的实例则返回true否则返回false-instanceof检测的是原型内部机制是通过判断对象的原型链中是否有类型的原型">instanceof用来判断A是否为B的实例， 表达式为:表达式为：A instanceof B，如果A是B的实例，则返回true，否则返回false。instanceof检测的是原型，内部机制是通过判断对象的原型链中是否有类型的原型。</h4>
+<pre><code class="language-js">{} instanceof Object; //true
+[] instanceof Array;  //true
+[] instanceof Object; //true
+&quot;123&quot; instanceof String; //false
+new String(123) instanceof String; //true
+</code></pre>
+<h2 id="3-constructor">3. constructor</h2>
+<h4 id="当一个函数f被定义时js引擎会为f添加prototype原型然后在prototype上添加一个constructor属性并让其指向f的引用f利用原型对象的constructor属性引用了自身当f作为构造函数创建对象时原型上的constructor属性被遗传到了新创建的对象上从原型链角度讲构造函数f就是新对象的类型-这样做的意义是让对象诞生以后就具有可追溯的数据类型">当一个函数F被定义时，JS引擎会为F添加prototype原型，然后在prototype上添加一个constructor属性，并让其指向F的引用，F利用原型对象的constructor属性引用了自身，当F作为构造函数创建对象时，原型上的constructor属性被遗传到了新创建的对象上，从原型链角度讲，构造函数F就是新对象的类型。这样做的意义是，让对象诞生以后，就具有可追溯的数据类型。</h4>
+<pre><code class="language-js">''.constructor == String  //true  
+
+new Number(1).constructor == Number  //true
+
+true.constructor == Boolean  //true
+
+new Function().constructor == Function  //true
+
+new Date().constructor == Date  //true
+
+new Error().constructor == Error  //true
+
+[].constructor == Array  //true
+
+document.constructor == HTMLDocument  //true
+
+window.constructor == Window  //true
+
+</code></pre>
+<ol start="4">
+<li>
+<h2 id="objectprototypetostring">Object.prototype.toString()</h2>
+<h4 id="tostring是object的原型方法调用该方法默认返回当前对象的class-这是一个内部属性其格式为object-xxx其中xxx就是对象的类型">toString()是Object的原型方法，调用该方法，默认返回当前对象的[[Class]]。这是一个内部属性，其格式为[object Xxx],其中Xxx就是对象的类型。</h4>
+<h4 id="对于object对象直接调用tostring就能返回object-object而对于其他对象则需要通过call-apply来调用才能返回正确的类型信息">对于Object对象，直接调用toString()就能返回[object Object],而对于其他对象，则需要通过call、apply来调用才能返回正确的类型信息。</h4>
+</li>
+</ol>
+<pre><code class="language-js">Object.prototype.toString.call('') //'[object String]'
+
+Object.prototype.toString.call(1)  //'[object Number]'
+
+Object.prototype.toString.call(true)   //'[object Boolean]'
+
+Object.prototype.toString.call(Symbol())  //'[object Symbol]'
+
+Object.prototype.toString.call(undefined) //'[object Undefined]'
+
+Object.prototype.toString.call({}) //'[object Object]'
+
+Object.prototype.toString.call([]) //'[object Array]'
+
+Object.prototype.toString.call(null)  //'[object Null]'
+
+Object.prototype.toString.call(new Function()) //'[object Function]'
+
+Object.prototype.toString.call(new Error())  //'[object Error]'
+
+Object.prototype.toString.call(new Date()) //'[object Date]'
+
+Object.prototype.toString.call(document) //'[object HTMLDocument]'
+
+Object.prototype.toString.call(window) //'[object Window]'
+
+</code></pre>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[History 对象]]></title>
         <id>https://LiHaoGo.github.io/post/history-dui-xiang/</id>
